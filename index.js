@@ -9,7 +9,7 @@ const PORT = process.env.PORT;
 const app = express();
 connectToDatabase();
 const corsOptions = {
-  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  origin: ['http://localhost:3000', 'http://localhost:3001','https://cybervie-lead-generations.vercel.app'],
   optionsSuccessStatus: 200 
 };
 
