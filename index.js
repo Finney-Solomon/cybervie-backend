@@ -4,6 +4,7 @@ const cors = require("cors");
 const connectToDatabase = require("./src/config/dbConfig");
 const userLeadRoutes = require("./src/routes/users_Leads_Routes");
 const userLoginRoutes = require("./src/routes/user_Login_Routes");
+const PORT = process.env.PORT;
 
 const app = express();
 connectToDatabase();
@@ -21,8 +22,8 @@ app.use("/",userLoginRoutes);
 app.use("/usersLeads",userLeadRoutes);
 
 
-app.listen(5001, () => {
-  console.log("Server is running on port 5001");
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${"" + PORT}`);
 });
 
 
