@@ -15,6 +15,8 @@ oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
 async function sendMail( data) {
   const name=data?.name
+  const email=data?.email
+  const mobile=data?.mobile
   const sendMailTo= data?.email
   try {
     const accessToken = await oAuth2Client.getAccessToken();
@@ -45,7 +47,7 @@ async function sendMail( data) {
       </head>
       <body>
       <p>Hi  ${name},</p>
-      <p>I noticed your interest in cybersecurity, and I wanted to introduce you to our training program at Cybervie.</p>
+      <p>We noticed your interest in cybersecurity, and We wanted to introduce you to our training program at Cybervie.</p>
       <ul>
         <li>Comprehensive curriculum</li>
         <li>Expert guidance</li>
@@ -69,9 +71,38 @@ async function sendMail( data) {
       
     `
     };
+    
+    const adminMail = {
+      from: 'CYBERVIE DEV <dev.cybervie@gmail.com>',
+      to: `info@cybervie.com`,
+      subject: 'New Lead ',
+      html: `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>New Lead  </title>
+      </head>
+      <body>
+      <p>Hi,</p>
+      <p>${name} has interest in cybersecurity.</p>
+      <p>Details  of the lead is as follows :</p>
+      <ul>
+        <li>Name:  ${name}</li>
+        <li>Email: ${email} </li>
+        <li>Mobile Number: ${mobile} </li>       
+      <p>Best regards,<br>
+      CYBERVIE DEV</p>
+      </body>
+      </html>     
+    `
+    };
+    
 
-    const result = await transport.sendMail(mailOptions);
-     return result;
+    const result = await transport.sendMail(mailOptions,adminMail);
+    const sendAdminMail = await transport.sendMail(adminMail);
+     return {result,sendAdminMail};
   } catch (error) {
     return error;
   }
