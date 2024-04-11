@@ -1,10 +1,10 @@
-const nodemailer = require('nodemailer');
-const { google } = require('googleapis');
+const nodemailer = require("nodemailer");
+const { google } = require("googleapis");
 
 const CLIENT_ID = process.env.CLIENT_ID;
-const CLIENT_SECRET =  process.env.CLIENT_SECRET;
-const REDIRECT_URI =  process.env.REDIRECT_URI;
-const REFRESH_TOKEN =  process.env.REFRESH_TOKEN;
+const CLIENT_SECRET = process.env.CLIENT_SECRET;
+const REDIRECT_URI = process.env.REDIRECT_URI;
+const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
 
 const oAuth2Client = new google.auth.OAuth2(
   CLIENT_ID,
@@ -13,19 +13,19 @@ const oAuth2Client = new google.auth.OAuth2(
 );
 oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
-async function sendMail( data) {
-  const name=data?.name
-  const email=data?.email
-  const mobile=data?.mobile
-  const sendMailTo= data?.email
+async function sendMail(data) {
+  const name = data?.name;
+  const email = data?.email;
+  const mobile = data?.mobile;
+  const sendMailTo = data?.email;
   try {
     const accessToken = await oAuth2Client.getAccessToken();
 
     const transport = nodemailer.createTransport({
-      service: 'gmail',
+      service: "gmail",
       auth: {
-        type: 'OAuth2',
-        user: 'dev.cybervie@gmail.com',
+        type: "OAuth2",
+        user: "dev.cybervie@gmail.com",
         clientId: CLIENT_ID,
         clientSecret: CLIENT_SECRET,
         refreshToken: REFRESH_TOKEN,
@@ -34,9 +34,9 @@ async function sendMail( data) {
     });
 
     const mailOptions = {
-      from: 'CYBERVIE DEV <dev.cybervie@gmail.com>',
+      from: "CYBERVIE DEV <dev.cybervie@gmail.com>",
       to: sendMailTo,
-      subject: 'Explore Our Cybersecurity Training Program',
+      subject: "Explore Our Cybersecurity Training Program",
       html: `
       <!DOCTYPE html>
       <html lang="en">
@@ -69,13 +69,13 @@ async function sendMail( data) {
       </body>
       </html>
       
-    `
+    `,
     };
-    
+
     const adminMail = {
-      from: 'CYBERVIE DEV <dev.cybervie@gmail.com>',
+      from: "CYBERVIE DEV <dev.cybervie@gmail.com>",
       to: `info@cybervie.com`,
-      subject: 'New Lead ',
+      subject: "New Lead ",
       html: `
       <!DOCTYPE html>
       <html lang="en">
@@ -96,18 +96,19 @@ async function sendMail( data) {
       CYBERVIE DEV</p>
       </body>
       </html>     
-    `
+    `,
     };
-    
-
-    const result = await transport.sendMail(mailOptions,adminMail);
+    console.log(adminMail, "adminMail");
+    console.log(mailOptions, "mailOptions");
+    const result = await transport.sendMail(mailOptions);
     const sendAdminMail = await transport.sendMail(adminMail);
-     return {result,sendAdminMail};
+    return { result, sendAdminMail };
   } catch (error) {
+    console.log(error);
     return error;
   }
 }
 
 module.exports = {
-  sendMail
+  sendMail,
 };
